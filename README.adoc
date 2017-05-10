@@ -1,0 +1,14 @@
+*DP - SLAM*
+
+DP-SLAM,
+yer işaretleri olmadan eş zamanlı lokalizasyon ve haritalama yapmayı amaçlar. DP-SLAM, bir döngü kapatıldığında haritaları düzelten tekniklerle uyumlu olsa da, çoğu durumda özel döngü kapatma tekniklerine sensör verisi üzerinden sadece tek bir geçiş yapar.
+
+DP-SLAM, haritalar üzerinde ortak olasılık dağılımı koruyarak çalışır ve robot bir partikül filtresi kullanarak poz verir. Bu DP-SLAM' in, belirsizlikler çözülene kadar birden fazla zaman adımında haritayla ilgili belirsizliği korumasına olanak tanır. Bu harita üzerindeki hataların zamanla birikmesini önler.
+
+*DP – Slam Nasıl Çalışır?*
+
+DP-SLAM, haritalar ve robot pozisyonları üzerinde ortak olasılık dağılımını korumak için bir parçacık filtresi kullanır. Bu, bazı zeki veri yapıları olmaksızın pahalıdır, çünkü her parçacık için tüm doluluk ızgarasının tam bir kopyasını, ve parçacık filtresinin yeniden örnekleme safhasında haritaların kopyalarını çıkarmak gerekir. Aşağıdaki şekil, kavramsal olarak parçacıkların kökünü ve harita güncellemelerini gösterir.
+
+Ancestry (soy) ağacındaki her bir kırmızı noktayı örneklenmiş bir robot pozisyonu ve kırmızı noktanın etrafındaki siyah çizgiler şu anki robot pozisyonuyla ilişkili yeni gözlemler olarak düşünülebilir. Gri çizgiler, önceki parçacıktan miras alınan haritanın parçasını gösterir.
+
+image::images/maps.png[] 

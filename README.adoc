@@ -24,7 +24,7 @@ Her bir parçacık harita ve robotun harita içindeki konumu ve yönü hakkında
 Oluşturacağımız ağacı düğüm ekleyip silerek korumak için O(APlogP) zamana ihtiyaç vardır.  A, lazer tarafından silinen ızgaralı karelerin sayısıdır. 
 Aşağıdaki şekilde D-P Slam algoritmasının pseudo kodu gösterilmiştir.
 
-images::images/sahtekod.png[]
+image::images/sahtekod.PNG[]
 
 Buna göre, soy ağacını asgari seviyede tutmak istiyoruz. Soy ağacı boyutunu en aza indirgemek için ilk ve en önemli adım, tekrar edecek şekilde çocukları olmayan düğümleri bularak budamaktır. Budama aşamasından sonra, yalnızca bir çocuğa sahip parent ve child düğümleri birleştirerek, üst düğümleri daraltıyoruz. Bu işlem tamamlandığında, ağacın her dalı haritadaki farklı güncelleme kümelerine karşılık gelecektir.
 Lokalizasyon için, her parçacığın tüm gözlem setini dikkate alması ve bunları bu noktaya kadar oluşturduğu haritayla karşılaştırması gerekir.  Soy ağacının D derinliğine sahip olduğunu varsayalım. Her bir sorgu maliyeti O(logP), toplam maliyet O(ADPlogP) olur.

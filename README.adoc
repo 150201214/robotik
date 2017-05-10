@@ -30,4 +30,59 @@ Buna göre, soy ağacını asgari seviyede tutmak istiyoruz. Soy ağacı boyutun
 Lokalizasyon için, her parçacığın tüm gözlem setini dikkate alması ve bunları bu noktaya kadar oluşturduğu haritayla karşılaştırması gerekir.  Soy ağacının D derinliğine sahip olduğunu varsayalım. Her bir sorgu maliyeti O(logP), toplam maliyet O(ADPlogP) olur.
 Geliştirilmiş arama algoritmasında, ağacın i. seviyesinde 2^i tane ikili arama yapılır. Ağacın, D seviyesindeki toplam çalışma maliyeti şu şekildedir:
 
+image::images/formul1.PNG[]
+
+Lokalizasyon için toplam karmaşıklı O(AP(D + Dlog( P/D))) olur. En kötü durumda D P’ye yaklaşır ve karmaşıklık O(AP^2) olur.
+
+Harita temsili ve gözlem modelinde, birikimli (kümülativ) olasılık Pc(x,p) olmak üzere şu şekilde hesaplanır:
+
+image::images/formul2.PNG[]
+
+Burada x mesafeyi, p ortam tipini, k bölünme sayısını ifade eder.
+
+Lazer atışının n'ye kadar olan kareler tarafından kesilen kümülatif olasılığı şu şekilde ifade edilir:
+
+image::images/formul3.PNG[]
+
+Lazerin kare j-1 değerine ulaşıp sonra j noktasında durma ihtimali şu şekildedir:
+
+image::images/formul4.PNG[]
+
+
+*Kaynak Kodların Çalıştırılması*
+
+İlk olarak sanal makinede linux kurulumu yaplması gerekmektedir. Daha sonra ise linux'a ROS kurulumu yapılmıştır. Bu işlemleri yaptıktan sonra Dp-Slam algoritmasını çalıştırmamız için şu adımları izlemeliyiz:
+
+ilk olarak segway base ve hokuyo laser'i çalıştırmalıyız. Bunları segbot_bringup kullanılarak yapılabiliriz,
+
+  $ roslaunch segbot_bringup segbot_hokuyo.launch
+ 
+Bundan sonra bir dosyanın içine robot sürüş halindeyken odom ve tarama verilerini kayıt edin,
+  
+  $ rosbag record -O dpslam.bag /scan /odom
+
+Ardından logger, konuların verilerini okuyabilir Sonra bunları gereken biçimde bir dosyaya yazabilir,
+
+  $ rosrun dpslam_logger dpslam.bag
+
+Üretilen günlük dosyası daha sonra kopyalanabilir ve dpslam klasöründe çalıştırılabilir,
+
+  $ cd ../dpslam
+  $ make
+  $ ./slam -p scan_data.log
+  
+Ortak ilişkili değişkenler: 
+
+- dpslam/map.h:	PARTICLE_NUMBER: Düşük seviye işlem için kullanılan parçacık sayısını değiştirmeliyiz.
+
+- H_PARTICLE_NUMBER: Yüksek seviye işlem için kullanılan parçacık sayısını değiştirmeliyiz.
+
+- MAP_WIDTH and MAP_HEIGHT: Çıktısı düşük haritaların boyutunu değiştirme.
+
+- H_MAP_WIDTH and H_MAP_HEIGHT: Çıktısı yüksek haritaların boyutunu değiştirme.
+
+- dpslam/basic.h: Harita çözünürlüğünde metre başına kılavuz kareler sayısı değiştirilebilir. Tipik olarak 20-35 (ızgara karesi başına 3-5cm)
+
+- dpslam/low.h: Her yüksek seviye yinelemesinden önce gerçekleştirilen düşük seviye iterasyon sayısını değiştirlebilir.
+
 

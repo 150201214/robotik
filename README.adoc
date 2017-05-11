@@ -795,3 +795,8 @@ Haritaları üretmek ve korumak için kod:
               return (eval / (1.0 - totalProb));
              
              
+*Örnek İnput ve Output*
+
+image::images/in[]
+
+image::images/out[]

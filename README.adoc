@@ -89,101 +89,49 @@ Ortak ilişkili değişkenler:
 
 Algoritmanın main Slam loop kodu şu şekildedir:
 
-               // Main slam loop
-              //
-              #include <sys/types.h>
-              #include <sys/stat.h>
-              #include <fcntl.h>
-              #include <sys/wait.h>
-              #include <math.h>
-              #include <strings.h>
-              #include <string.h>
-              #include <pthread.h>
-              #include <stdio.h>
-              #include <stdlib.h>
-              #include "high.h"
-              #include "mt-rand.h"
-              // The initial seed used for the random number generated can be set here.
-              #define SEED 1
-              // Default names for printing map files.
-              // File types are automatically appended.
-              #define MAP_PATH_NAME "map"
-              #define PARTICLES_PATH_NAME "particles"
-              //
-              // Globals
-              //
-              // The number of iterations between writing out the map for video. 0 is off.
-              int VIDEO = 10;
-              // The current commands being given to the robot for movement. 
-              // Not used when the robot is reading data from a log file.
-              double RotationSpeed, TranslationSpeed;
-              // The means by which the slam thread can be told to halt, either by user command or by the end of a playback file.
-              int continueSlam;
-              int PLAYBACK_COMPLETE = 0;
-              //
-              //
-              // InitializeRobot
-              //
-              // Calls the routines in 'ThisRobot.c' to initialize the necessary hardware and software.
-              // Each call has an opportunity to return a value of -1, which indicates that the initialization of that
-              // part of the robot has failed. In that event, Initialize robot itself will return a general error of -1.
-              //
-              //
-              int InitializeRobot(int argc, char *argv[]) {
-                if (InitializeThisRobot(argc, argv) == -1) {
-                  fprintf(stderr, "Start up initialization of the robot has failed.\n");
-                  return -1;
-                }
-                fprintf(stderr, "Connect Odometry.\n");
-                if (ConnectOdometry(argc, argv) == -1) {
-                  fprintf(stderr, "Unable to connect to the robot's odometry.\n");
-                  return -1;
-                }
-                fprintf(stderr, "Connect Laser.\n");
-                if (ConnectLaser(argc, argv) == -1) {
-                  fprintf(stderr, "Unable to connect to the robot's laser.\n");
-                  return -1;
-                }
-                fprintf(stderr, "Connect Drive.\n");
-                if (ConnectDrive(argc, argv) == -1) {
-                  fprintf(stderr, "Unable to connect to the robot's drive motors.\n");
-                  return -1;
-                }
-                return 0;
+                         // Main slam loop
+                        //
+          void HighSlam(TPath *path, TSenseLog *obs)
+          {
+            int i, j;
+            char name[16];
+
+            HighInitializeFlags();
+
+            if (h_curGeneration == 0) {
+              HighAddToWorldModel(path, obs, 1);
+
+              sprintf(name, "hmap00");
+              HighPrintMap(name, h_particle[0].ancestryNode);
+              sprintf(name, "rm hmap00.ppm");
+              system(name);
+            }
+            else {
+              // Localize off of the path
+              HighLocalize(path, obs);
+
+              HighUpdateAncestry(path, obs);
+
+              if ((H_VIDEO) && (h_curGeneration % H_VIDEO == 0)) {
+                sprintf(name, "hmap%.2d", (int) (h_curGeneration/H_VIDEO));
+                j = 0;
+                for (i = 0; i < h_cur_particles_used; i++)
+            if (h_particle[i].probability > h_particle[j].probability)
+              j = i;
+
+                HighPrintMap(name, h_particle[j].ancestryNode);
+                sprintf(name, "rm hmap%.2d.ppm", (int) (h_curGeneration/H_VIDEO));
+                system(name);
               }
-              void WriteLog(FILE *logFile, TSense sense) 
-              { 
-                int i;
-                fprintf(logFile, "Odometry %.6f %.6f %.6f \n", odometry.x, odometry.y, odometry.theta);
-                fprintf(logFile, "Laser %d ", SENSE_NUMBER);
-                for (i = 0; i < SENSE_NUMBER; i++)
-                  fprintf(logFile, "%.6f ", sense[i].distance/MAP_SCALE);
-                fprintf(logFile, "\n");
-              }
-              void *Slam(void *a)
-              {
-                TPath *path, *trashPath;
-                TSenseLog *obs, *trashObs;
-                InitHighSlam();
-                InitLowSlam();
-                while (continueSlam) {
-                  LowSlam(continueSlam, &path, &obs);
-                  HighSlam(path, obs);
-                  // Get rid of the path and log of observations
-                  while (path != NULL) {
-                    trashPath = path;
-                    path = path->next;
-                    free(trashPath);
-                  }
-                  while (obs != NULL) {
-                    trashObs = obs;
-                    obs = obs->next;
-                    free(trashObs);
-                  }
-                }
-                CloseLowSlam();
-                return NULL;
-              }
+            }
+
+            h_curGeneration++;
+            HighInitializeFlags();
+          }
+
+                          CloseLowSlam();
+                          return NULL;
+                        }
 
 
 Haritaları üretmek ve korumak için kod:

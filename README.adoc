@@ -65,7 +65,7 @@ Ardından logger, konuların verilerini okuyabilir Sonra bunları gereken biçim
 
   $ rosrun dpslam_logger dpslam.bag
 
-Üretilen günlük dosyası daha sonra kopyalanabilir ve dpslam klasöründe çalıştırılabilir,
+Üretilen log dosyası daha sonra kopyalanabilir ve dpslam klasöründe çalıştırılabilir,
 
   $ cd ../dpslam
   $ make

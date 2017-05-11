@@ -797,6 +797,6 @@ Haritaları üretmek ve korumak için kod:
              
 *Örnek İnput ve Output*
 
-image::images/in[]
+image::images/in.PNG[]
 
-image::images/out[]
+image::images/out.png[]

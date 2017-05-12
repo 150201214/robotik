@@ -83,11 +83,17 @@ Bir komut satırı aracıdır. Robot hareket ederken yayınlanan mesajları kayd
 
 ada, c, ch, com+, c++, java, lisp, neko, .net, pascal, perl, php, python, ruby, tcl/tk dilleri ve/veya platformları için eklentileri bulunan, bunlarla da istenirse kullanılabilen bir yazılım.
 kısaca elinden gelenler;
+
 * format çevirme:bir görüntü formatından diğerine çevrim mesela (png to jpeg)
+
 * image çevirme: bir image üzerinde resize, rotate, crop, flip veya trim 
+
 * özel effectler: blur, sharpen, threshold, tint 
+
 * text &amp; comments: image üzerine text ekleme
+
 * image identification: herhangi bir image ın özelliklerini ve formatını tanımlama
+
 * büyük resim desteği: mega- veya giga-pixel imagelar üzerinde okuma, işleme, yazma
 
 *5)* İndirdiğimiz dosyaları biz "Belgelerim" altında "DP-SLAM" klasörünün içine attık, bundan dolayı dosya yolu şu şekilde  belirlemeliyiz.
@@ -114,16 +120,12 @@ kısaca elinden gelenler;
 Algoritmanın main Slam loop kodu şu şekildedir:
 
           // Main slam loop                    
-          void HighSlam(TPath *path, TSenseLog *obs)
-          {
+          void HighSlam(TPath *path, TSenseLog *obs){
             int i, j;
             char name[16];
-
             HighInitializeFlags();
-
             if (h_curGeneration == 0) {
               HighAddToWorldModel(path, obs, 1);
-
               sprintf(name, "hmap00");
               HighPrintMap(name, h_particle[0].ancestryNode);
               sprintf(name, "rm hmap00.ppm");
@@ -132,26 +134,19 @@ Algoritmanın main Slam loop kodu şu şekildedir:
             else {
               // Localize off of the path
               HighLocalize(path, obs);
-
               HighUpdateAncestry(path, obs);
-
               if ((H_VIDEO) && (h_curGeneration % H_VIDEO == 0)) {
                 sprintf(name, "hmap%.2d", (int) (h_curGeneration/H_VIDEO));
                 j = 0;
                 for (i = 0; i < h_cur_particles_used; i++)
             if (h_particle[i].probability > h_particle[j].probability)
               j = i;
-
                 HighPrintMap(name, h_particle[j].ancestryNode);
                 sprintf(name, "rm hmap%.2d.ppm", (int) (h_curGeneration/H_VIDEO));
                 system(name);
-              }
-            }
-
+              } }
             h_curGeneration++;
-            HighInitializeFlags();
-          }
-
+            HighInitializeFlags();}
                           CloseLowSlam();
                           return NULL;
                         }
@@ -178,18 +173,14 @@ Haritaları üretmek ve korumak için kod:
             // We like to keep track of exactly how many particles we are currently using.
             int l_cur_particles_used;
             int FLAG;
-            void LowInitializeFlags()
-            {
+            void LowInitializeFlags(){
               while (observationID > 0) {
                 observationID--;
                 flagMap[obsX[observationID]][obsY[observationID]] = 0;
                 obsX[observationID] = 0;
                 obsY[observationID] = 0;
-              }
-              observationID = 1;
-            }
-            void LowInitializeWorldMap()
-            {
+              }observationID = 1;}
+            void LowInitializeWorldMap(){
               int x, y;
               for (y=0; y < MAP_HEIGHT; y++)
                 for (x=0; x < MAP_WIDTH; x++) {
@@ -218,11 +209,8 @@ Haritaları üretmek ve korumak için kod:
               free(lowMap[x][y]->array);
               free(lowMap[x][y]);
               lowMap[x][y] = NULL;
-                  }
-                }
-            }
-            void LowResizeArray(TMapStarter *node, int deadID)
-            {
+              }}}
+            void LowResizeArray(TMapStarter *node, int deadID){
               short int i, j, ID, x, y;
               short int hash[ID_NUMBER];
               int source, last;
@@ -240,8 +228,7 @@ Haritaları üretmek ve korumak için kod:
               // Run through each entry in our old array of observations.
               for (i=0; i < node->total; i++) {
                 if (node->array[i].ID == deadID) {
-                  l_particleID[deadID].mapEntries[node->array[i].source].node = -1;
-                }
+                  l_particleID[deadID].mapEntries[node->array[i].source].node = -1;}
                 // This observation is the first one of this ID entered into the new array. Just copy it over, and note its position.
                 else if (hash[node->array[i].ID] == -1) {
                   // Copy the information into the new array.
@@ -254,8 +241,7 @@ Haritaları üretmek ve korumak için kod:
                   l_particleID[ temp[j].ID ].mapEntries[ temp[j].source ].node = j;
                   // Note that an observation with this ID has already been entered into the new array, and where that was entered.
                   hash[node->array[i].ID] = j;
-                  j++;
-                }
+                  j++;}
                 else if (node->array[i].distance > temp[hash[node->array[i].ID]].distance) {
                   // We set a couple of values to shorter variable names, in order to reduce indirection and make 
                   // reading the code easier.
@@ -277,8 +263,7 @@ Haritaları üretmek ve korumak için kod:
                   temp[hash[ID]].source = node->array[i].source;
                   temp[hash[ID]].hits = node->array[i].hits;
                   temp[hash[ID]].distance = node->array[i].distance;
-                  l_particleID[ID].mapEntries[ node->array[i].source ].node = hash[ID];
-                }
+                  l_particleID[ID].mapEntries[ node->array[i].source ].node = hash[ID];}
                 else {
                   // The new entry is an older form of the one already entered. We should inherit the new parentGen
                   if (node->array[i].parentGen != -1)
@@ -298,15 +283,12 @@ Haritaları üretmek ve korumak için kod:
               if ((lowMap[x][y] == node) && (l_particleID[ID].mapEntries[source].node <= i))
                 temp[hash[ID]].source = source;
               else
-                lowMap[x][y]->array[ l_particleID[ID].mapEntries[source].node ].source = source;
-                  }
+                lowMap[x][y]->array[ l_particleID[ID].mapEntries[source].node ].source = source;}
               node->total = j;
               node->dead = 0;
               free(node->array);
-              node->array = temp;
-            }  
-            static void AddToWorkingArray(int i, TMapStarter *node, short int workingArray[]) 
-            {
+              node->array = temp;}  
+            static void AddToWorkingArray(int i, TMapStarter *node, short int workingArray[]) {
               int j, source, last;
               TEntryList *entries;
               // Keep an eye out for dead entries. They will be made apparent when two entries both have the same ID.
@@ -317,15 +299,13 @@ Haritaları üretmek ve korumak için kod:
                   // Otherwise, remove the source, then remove the entry. Follow with a recursive call.
                   j = i;
                   if (node->array[i].parentGen >= 0)
-              node->array[ workingArray[node->array[i].ID] ].parentGen = node->array[i].parentGen;
-                }
+              node->array[ workingArray[node->array[i].ID] ].parentGen = node->array[i].parentGen;}
                 // The previously entered entry is outdated. Replace it with this newer one.
                 else {
                   j = workingArray[node->array[i].ID];
                   workingArray[node->array[i].ID] = i;
                   if (node->array[j].parentGen >= 0)
-              node->array[i].parentGen = node->array[j].parentGen;
-                }
+              node->array[i].parentGen = node->array[j].parentGen;}
                 l_particleID[node->array[j].ID].total--;
                 entries = l_particleID[node->array[j].ID].mapEntries;
                 source = node->array[j].source;
@@ -334,8 +314,7 @@ Haritaları üretmek ve korumak için kod:
                   entries[source].x = entries[last].x;
                   entries[source].y = entries[last].y;
                   entries[source].node = entries[last].node;
-                  lowMap[ entries[source].x ][ entries[source].y ]->array[ entries[source].node ].source = source;
-                }    
+                  lowMap[ entries[source].x ][ entries[source].y ]->array[ entries[source].node ].source = source;}    
                 node->total--;
                 node->dead--;
                 if (j != node->total) {
@@ -350,11 +329,8 @@ Haritaları üretmek ve korumak için kod:
                   else if (i != node->total) 
               // Final step- add this newly copied node to the working array (we don't want it skipped over)
               AddToWorkingArray(j, node, workingArray);
-                }
-              }
-            }
-            inline void LowBuildObservation(int x, int y, char usage)
-            {
+              }}
+            inline void LowBuildObservation(int x, int y, char usage){
               TAncestor *lineage;
               PAncestor stack[PARTICLE_NUMBER];
               short int workingArray[ID_NUMBER+1];
@@ -374,8 +350,7 @@ Haritaları üretmek ve korumak için kod:
               for (i=0; i < ID_NUMBER; i++) {
                 observationArray[here][i] = -1;
                 workingArray[i] = -1;
-                l_particleID[i].seen = 0;
-              }
+                l_particleID[i].seen = 0;}
               for (i=0; i < lowMap[x][y]->total; i++) 
                 AddToWorkingArray(i, lowMap[x][y], workingArray);
               if (usage) {
@@ -384,8 +359,7 @@ Haritaları üretmek ve korumak için kod:
                   if (lowMap[x][y]->array[i].hits > 0) 
               flag = 0;
                   else
-              workingArray[lowMap[x][y]->array[i].ID] = -2;
-              }
+              workingArray[lowMap[x][y]->array[i].ID] = -2;}
               // Fill in the holes in the observation array, by using the value of their parents
               for (i=0; i < l_cur_particles_used; i++) {
                 lineage = l_particle[i].ancestryNode;
@@ -396,8 +370,7 @@ Haritaları üretmek ve korumak için kod:
                   topStack++;
                   // Note that we already have seen this ancestor, for later lineage searches
                   lineage->seen = 1;
-                  lineage = lineage->parent;  // Advance to this ancestor's parent
-                }
+                  lineage = lineage->parent;  // Advance to this ancestor's parent }
                 while (topStack > 0) {
                   topStack--;
                   lineage = stack[topStack];
@@ -405,17 +378,13 @@ Haritaları üretmek ve korumak için kod:
               workingArray[lineage->ID] = workingArray[lineage->parent->ID];
               if (workingArray[lineage->ID] == -1) 
                 flag = 0;
-                  }
-                }
-              }
+               }}
               if ((usage) && (flag)) 
                 flagMap[x][y] = -2;
               else
                 for (i=0; i < ID_NUMBER; i++) 
-                  observationArray[here][i] = workingArray[i];
-            }
-            void LowUpdateGridSquare(int x, int y, double distance, int hit, int parentID)
-            {
+                  observationArray[here][i] = workingArray[i];}
+            void LowUpdateGridSquare(int x, int y, double distance, int hit, int parentID){
               TEntryList *tempEntry;
               int here, i;
               if (lowMap[x][y] == NULL) {
@@ -435,15 +404,13 @@ Haritaları üretmek ve korumak için kod:
                 lowMap[x][y]->array = (TMapNode *) malloc(sizeof(TMapNode));
                 if (lowMap[x][y]->array == NULL) fprintf(stderr, "Malloc failed in making initial map array for %d %d\n", x, y);
                 for (i=0; i < ID_NUMBER; i++) 
-                  observationArray[flagMap[x][y]][i] = -1;
-              }
+                  observationArray[flagMap[x][y]][i] = -1;}
               else if (flagMap[x][y] == 0) 
                 LowBuildObservation(x, y, 0);
               here = observationArray[flagMap[x][y]][parentID];
               if ((here != -1) && (lowMap[x][y]->array[here].ID == parentID)) {
                 lowMap[x][y]->array[here].hits = lowMap[x][y]->array[here].hits + hit;
-                lowMap[x][y]->array[here].distance = lowMap[x][y]->array[here].distance + distance;
-              }
+                lowMap[x][y]->array[here].distance = lowMap[x][y]->array[here].distance + distance; }
               else {
                 // We will be adding a new entry to the list- is there enough room?
                 if (lowMap[x][y]->size <= lowMap[x][y]->total) {
@@ -451,9 +418,7 @@ Haritaları üretmek ve korumak için kod:
                   if (lowMap[x][y]->total == 0) {
               free(lowMap[x][y]->array);
               free(lowMap[x][y]);
-              lowMap[x][y] = NULL;
-                  }
-                }         
+              lowMap[x][y] = NULL; }}         
                 observationArray[flagMap[x][y]][parentID] = lowMap[x][y]->total;   
                 if (l_particleID[parentID].size == 0) {
                   l_particleID[parentID].size = 1;
@@ -537,10 +502,8 @@ Haritaları üretmek ve korumak için kod:
               if (lowMap[x][y]->array[ observationArray[flagMap[x][y]][parentID] ].hits == 0)
                 return 0;
               return (1.0 - exp(-(lowMap[x][y]->array[ observationArray[flagMap[x][y]][parentID] ].hits/
-                      lowMap[x][y]->array[ observationArray[flagMap[x][y]][parentID] ].distance) * distance));
-            }
-            double LowComputeProb(int x, int y, double distance, int ID) 
-            {
+                      lowMap[x][y]->array[ observationArray[flagMap[x][y]][parentID] ].distance) * distance));}
+            double LowComputeProb(int x, int y, double distance, int ID){
               int i;
               if (lowMap[x][y] == NULL) 
                 return UNKNOWN;
@@ -549,16 +512,12 @@ Haritaları üretmek ve korumak için kod:
                   if (lowMap[x][y]->array[i].ID == ID) {
               if (lowMap[x][y]->array[i].hits == 0)
                 return 0;
-              return (1.0 - exp(-(lowMap[x][y]->array[i].hits/lowMap[x][y]->array[i].distance) * distance));
-                  }
-                }
+              return (1.0 - exp(-(lowMap[x][y]->array[i].hits/lowMap[x][y]->array[i].distance) * distance));}}
                 if (l_particleID[ID].parent == NULL)
                   return UNKNOWN;
                 else 
-                  ID = l_particleID[ID].parent->ID;
-              }
-              return UNKNOWN;
-            }
+                  ID = l_particleID[ID].parent->ID;}
+              return UNKNOWN;}
             void LowAddTrace(double startx, double starty, double MeasuredDist, double theta, int parentID, int addEnd) {
               double overflow, slope; // Used for actually tracing the line
               int x, y, incX, incY, endx, endy;
@@ -575,16 +534,13 @@ Haritaları üretmek ve korumak için kod:
               endy = (int) (dy);
               if (startx > dx) {
                 incX = -1;
-                xedge = 1;
-              }
+                xedge = 1}
               else {
                 incX = 1;
-                xedge = 0;
-              }
+                xedge = 0;}
               if (starty > dy) {
                 incY = -1;
-                yedge = 1;
-              }
+                yedge = 1;}
               else {
                 incY = 1;
                 yedge = 0;
@@ -599,8 +555,7 @@ Haritaları üretmek ve korumak için kod:
                 overflow = overflow - (slope*error);
                 if (overflow < 0.0) {
                   y = y + incY;
-                  overflow = overflow + 1.0;
-                }
+                  overflow = overflow + 1.0; }
                 // Now we can start the actual line trace.
                 for (x = (int) (startx) + incX; x != endx; x = x + incX) {
                   overflow = overflow - slope;
@@ -613,18 +568,14 @@ Haritaları üretmek ve korumak için kod:
               y = y + incY;
               distance = -overflow*cosecant;
               overflow = overflow + 1.0;
-              LowUpdateGridSquare(x, y, distance, 0, parentID);
-                  }
-                }
+              LowUpdateGridSquare(x, y, distance, 0, parentID);} }
                 // Update the last grid square seen as having a hit.
                 if (addEnd) {
                   if (incX < 0)
               distance = fabs((x+1) - dx)*secant;
                   else
               distance = fabs(dx - x)*secant;
-                  LowUpdateGridSquare(endx, endy, distance, 1, parentID);
-                }
-              }  
+                  LowUpdateGridSquare(endx, endy, distance, 1, parentID);} }  
               else {
                 x = (int) (startx);
                 overflow = startx - x;
@@ -648,18 +599,13 @@ Haritaları üretmek ve korumak için kod:
               x = x + incX;
               distance = -overflow*secant;
               overflow = overflow + 1.0;
-              LowUpdateGridSquare(x, y, distance, 0, parentID);
-                  }
-                }
+              LowUpdateGridSquare(x, y, distance, 0, parentID); } }
                 if (addEnd) {
                   if (incY < 0)
               distance = fabs(((y+1) - dy)/sin(theta));
                   else
               distance = fabs((dy - y)/sin(theta));
-                  LowUpdateGridSquare(endx, endy, distance, 1, parentID);
-                }
-              }
-            }
+                  LowUpdateGridSquare(endx, endy, distance, 1, parentID); } }
             double LowLineTrace(double startx, double starty, double theta, double MeasuredDist, int parentID, float culling) {
               double overflow, slope; // Used for actually tracing the line
               int x, y, incX, incY, endx, endy;
@@ -688,20 +634,16 @@ Haritaları üretmek ve korumak için kod:
               endy = (int) (dy);      
               if (startx > dx) {
                 incX = -1;
-                xblock = -startx;
-              }
+                xblock = -startx; }
               else {
                 incX = 1;
-                xblock = 1.0-startx;
-              }
+                xblock = 1.0-startx;}
               if (starty > dy) {
                 incY = -1;
-                yblock = -starty;
-              }
+                yblock = -starty; }
               else {
                 incY = 1;
-                yblock = 1.0-starty;
-              }
+                yblock = 1.0-starty; }
               // Two copies of the same basic code, swapping the roles of x and y, depending on which one is the primary 
               // direction of motion in the line trace.
               if (fabs(startx - dx) > fabs(starty - dy)) {
@@ -721,8 +663,7 @@ Haritaları üretmek ve korumak için kod:
                 // to the y axis. 
                 if (overflow - dy < 0.0) {
                   y = y + incY;
-                  overflow = overflow - dy + 1.0;
-                }            
+                  overflow = overflow - dy + 1.0;}            
                 else 
                   overflow = overflow - dy;            
                 standardDist = slope*cosecant;         
@@ -744,8 +685,7 @@ Haritaları üretmek ve korumak için kod:
                 error = fabs(xMotion);
               if (error < 20.0) 
                 eval = eval + (prob * exp(-(error*error)/(2*LOW_VARIANCE)));
-              totalProb = totalProb - prob;
-                  }
+              totalProb = totalProb - prob;}
                   if (overflow < 0.0) {
               y += incY;
               yMotion = yMotion + cosecant;
@@ -757,10 +697,7 @@ Haritaları üretmek ve korumak için kod:
                 if (error < 20.0) 
                   eval = eval + (prob * exp(-(error*error)/(2*LOW_VARIANCE)));
               }
-              totalProb = totalProb - prob;
-                  }
-                }
-              }
+              totalProb = totalProb - prob;}}}
               else {
                 x = (int) (startx);
                 overflow = startx - x;
@@ -772,8 +709,7 @@ Haritaları üretmek ve korumak için kod:
                 dx = fabs(dy/tan(theta));
                 if (overflow - dx < 0) {
                   x = x + incX;
-                  overflow = overflow - dx + 1.0;
-                }
+                  overflow = overflow - dx + 1.0;}
                 else 
                   overflow = overflow - dx;
                 standardDist = slope*secant;
@@ -793,8 +729,7 @@ Haritaları üretmek ve korumak için kod:
               else 
                 error = fabs(yMotion);
               if (error < 20.0) 
-                eval = eval + (prob * exp(-(error*error)/(2*LOW_VARIANCE)));
-                  }
+                eval = eval + (prob * exp(-(error*error)/(2*LOW_VARIANCE)));}
                   totalProb = totalProb - prob;
                   if (overflow < 0.0) {
               x += incX;
@@ -805,12 +740,8 @@ Haritaları üretmek ve korumak için kod:
               if (prob > 0) {
                 error = fabs(yMotion);
                 if (error < 20.0) 
-                  eval = eval + (prob * exp(-(error*error)/(2*LOW_VARIANCE)));
-              }
-              totalProb = totalProb - prob;
-                  }
-                }
-              }
+                  eval = eval + (prob * exp(-(error*error)/(2*LOW_VARIANCE))); }
+              totalProb = totalProb - prob;}}}
               if (MeasuredDist >= MAX_SENSE_RANGE) 
                 return (eval + totalProb);
               if (totalProb == 1)
@@ -822,4 +753,7 @@ Haritaları üretmek ve korumak için kod:
 
 image::images/in.PNG[]
 
-image::images/out.png[]
+
+image::images/c1.png[]
+image::images/c2.png[]
+image::images/c3.png[]

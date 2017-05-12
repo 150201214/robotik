@@ -53,14 +53,61 @@ image::images/formul4.PNG[]
 
 DP-Slam algoritmasını çalıştırabilmemiz için şu adımları izlememiz gerekmektedir:
 
-*1)* Algoritmayı çalıştırabilmemiz için linux işletim sistemine ihtiyacımız vardır. Linux işletim sistemini sanal makine üzerinde çalışrırabiliriz. Linux işletim sistemini çalıştırabilmemzi için,
+*1)* İlk olarak https://www.openslam.org/dpslam.html linkinden DP-Slam algoritmasının kaynak kodlarının indirmeliyiz.
+*Alternetif Link:* https://github.com/jordant0/DP-SLAM
 
-  1.a) link:+https://www.virtualbox.org/wiki/Downloads
+*2)* Algoritmayı çalıştırabilmemiz için linux işletim sistemine ihtiyacımız vardır. Linux işletim sistemini sanal makine üzerinde çalıştırabiliriz. Linux işletim sistemini çalıştırabilmemiz için,
 
-İlk olarak sanal makinede linux kurulumu yaplması gerekmektedir. Daha sonra ise linux'a ROS kurulumu yapılmıştır. Bu işlemleri yaptıktan sonra Dp-Slam algoritmasını çalıştırmamız için şu adımları izlemeliyiz:
+a) https://www.virtualbox.org/wiki/Downloads ,adresinden sanal makine indirilerek, kurulumu yapılır.
+
+b) Daha sonra http://wiki.ros.org/turtlebot/Tutorials/indigo/ISO%20Installation , adresinden içerisinde Ros' un da bulunduğu Ununtu 14.04 Ros İndigo indirilerek, kurulumu yapılır.
+
+*Not:* Alternatif olarak https://www.ubuntu.com/download/desktop , adresinden Ubuntu 16.04 sürümüde indirilerek kurulumu yapılabilir. Fakat bu sürümde Ros bulunmadığından dolayı, http://yapbenzet.kocaeli.edu.tr/ros-kurulumu/ adresindeki adımlar takip edilerek kurulumu yapılmalıdır.
+     
+*3)* Yukarıdaki adımlar tamamlandıktan sonra, Rosbag kurulumu yapılır.
+
+      sudo apt-get update
+      sudo apt-get install python-rosbag
 
 
+*Rosbag Nedir?*
 
+Bir komut satırı aracıdır. Robot hareket ederken yayınlanan mesajları kaydedebilmekte ve daha sonra bu mesajları oynatabilmektedir. Bu sayede robot çalıştırılmadan bag dosyası üzerinden testler yapılabilmektedir. Diğer bir yandan farklı algoritmaların aynı ortamda karşılaştırılmasında, robot her bir algoritmanın 33 uygulanması sırasında alanı tekrar gezmesi gerekecektir. Bu durum her ne kadar gayret edilse de robotun aynı alanı aynı şekilde ufak farklılıklarla bile olsa gezememesine yol açacaktır. Ve karşılaştırma yapılan örnekler farklı olduğundan net sonuca ulaşılamayabilir. Oysaki gezilen alanın verilerinin toplandığı mesajlar bir bag dosyasına kaydedildiğinde her bir algoritma için aynı veri kullanılabilmektedir. Bu yöntem hem pratiklik sağlamakta hem de karşılaştırma doğruluğunu arttırmaktadır.
+
+*4)* Imagemagick kurulumu yapılır.
+
+      sudo apt-get update
+      sudo apt-get install imagemagick
+
+*Imagemagick Nedir?*
+
+ada, c, ch, com+, c++, java, lisp, neko, .net, pascal, perl, php, python, ruby, tcl/tk dilleri ve/veya platformları için eklentileri bulunan, bunlarla da istenirse kullanılabilen bir yazılım.
+kısaca elinden gelenler;
+* format çevirme:bir görüntü formatından diğerine çevrim mesela (png to jpeg)
+* image çevirme: bir image üzerinde resize, rotate, crop, flip veya trim 
+* özel effectler: blur, sharpen, threshold, tint 
+* text &amp; comments: image üzerine text ekleme
+* image identification: herhangi bir image ın özelliklerini ve formatını tanımlama
+* büyük resim desteği: mega- veya giga-pixel imagelar üzerinde okuma, işleme, yazma
+
+*5)* İndirdiğimiz dosyaları biz "Belgelerim" altında "DP-SLAM" klasörünün içine attık, bundan dolayı dosya yolu şu şekilde  belirlemeliyiz.
+
+      cd Belgeler
+      cd DP-SLAM
+      cd dp-slam
+      
+*6)* Makefile  dosyası derlenmelidir.
+
+      make
+
+*7)* odometry verileri okunmalıdır.
+
+      ./slam -p scan_data.log -- Bu bizim edindiğimiz bir veri dosyası
+      ./slam -p loop5.log
+
+*Not:* Bu adımdaki işlem sırasında "bash: ./slam:Erişim engellendi" hatası alabiliriz bunu düzeltmek için,
+
+       sudo chmod -R 755 ./slam
 
 *Algoritmanın Kodsal Karşılığı*
 

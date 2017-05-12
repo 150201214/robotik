@@ -51,46 +51,22 @@ image::images/formul4.PNG[]
 
 *Kaynak Kodların Çalıştırılması*
 
+DP-Slam algoritmasını çalıştırabilmemiz için şu adımları izlememiz gerekmektedir:
+
+*1)* Algoritmayı çalıştırabilmemiz için linux işletim sistemine ihtiyacımız vardır. Linux işletim sistemini sanal makine üzerinde çalışrırabiliriz. Linux işletim sistemini çalıştırabilmemzi için,
+
+  1.a) link:+https://www.virtualbox.org/wiki/Downloads
+
 İlk olarak sanal makinede linux kurulumu yaplması gerekmektedir. Daha sonra ise linux'a ROS kurulumu yapılmıştır. Bu işlemleri yaptıktan sonra Dp-Slam algoritmasını çalıştırmamız için şu adımları izlemeliyiz:
 
-ilk olarak segway base ve hokuyo laser'i çalıştırmalıyız. Bunları segbot_bringup kullanılarak yapılabiliriz,
 
-  $ roslaunch segbot_bringup segbot_hokuyo.launch
- 
-Bundan sonra bir dosyanın içine robot sürüş halindeyken odom ve tarama verilerini kayıt edin,
-  
-  $ rosbag record -O dpslam.bag /scan /odom
 
-Ardından logger, konuların verilerini okuyabilir Sonra bunları gereken biçimde bir dosyaya yazabilir,
-
-  $ rosrun dpslam_logger dpslam.bag
-
-Üretilen log dosyası daha sonra kopyalanabilir ve dpslam klasöründe çalıştırılabilir,
-
-  $ cd ../dpslam
-  $ make
-  $ ./slam -p scan_data.log
-  
-Ortak ilişkili değişkenler: 
-
-- dpslam/map.h:	PARTICLE_NUMBER: Düşük seviye işlem için kullanılan parçacık sayısını değiştirmeliyiz.
-
-- H_PARTICLE_NUMBER: Yüksek seviye işlem için kullanılan parçacık sayısını değiştirmeliyiz.
-
-- MAP_WIDTH and MAP_HEIGHT: Çıktısı düşük haritaların boyutunu değiştirme.
-
-- H_MAP_WIDTH and H_MAP_HEIGHT: Çıktısı yüksek haritaların boyutunu değiştirme.
-
-- dpslam/basic.h: Harita çözünürlüğünde metre başına kılavuz kareler sayısı değiştirilebilir. Tipik olarak 20-35 (ızgara karesi başına 3-5cm)
-
-- dpslam/low.h: Her yüksek seviye yinelemesinden önce gerçekleştirilen düşük seviye iterasyon sayısını değiştirlebilir.
 
 *Algoritmanın Kodsal Karşılığı*
 
 Algoritmanın main Slam loop kodu şu şekildedir:
 
-                         // Main slam loop
-                        //
+          // Main slam loop                    
           void HighSlam(TPath *path, TSenseLog *obs)
           {
             int i, j;

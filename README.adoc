@@ -60,9 +60,9 @@ DP-Slam algoritmasını çalıştırabilmemiz için şu adımları izlememiz ger
 
 a) https://www.virtualbox.org/wiki/Downloads ,adresinden sanal makine indirilerek, kurulumu yapılır.
 
-b) Daha sonra http://wiki.ros.org/turtlebot/Tutorials/indigo/ISO%20Installation , adresinden içerisinde Ros' un da bulunduğu Ununtu 14.04 Ros İndigo indirilerek, kurulumu yapılır.
+b) Daha sonra https://www.ubuntu.com/download/desktop , adresinden Ubuntu 16.04 sürümüde indirilerek kurulumu yapılır.
 
-*Not:* Alternatif olarak https://www.ubuntu.com/download/desktop , adresinden Ubuntu 16.04 sürümüde indirilerek kurulumu yapılabilir. Fakat bu sürümde Ros bulunmadığından dolayı, http://yapbenzet.kocaeli.edu.tr/ros-kurulumu/ adresindeki adımlar takip edilerek kurulumu yapılmalıdır.
+*Not:* Alternatif olarak  http://wiki.ros.org/turtlebot/Tutorials/indigo/ISO%20Installation , adresinden Ununtu 14.04 Ros İndigo indirilerek, kurulumu yapılabilir.
      
 *3)* Yukarıdaki adımlar tamamlandıktan sonra, Rosbag kurulumu yapılır.
 
@@ -114,6 +114,17 @@ kısaca elinden gelenler;
 *Not:* Bu adımdaki işlem sırasında "bash: ./slam:Erişim engellendi" hatası alabiliriz bunu düzeltmek için,
 
        sudo chmod -R 755 ./slam
+
+*Not:* Bu adımda Dp-Slam klasörü içerisindeki loop5.log data seti kullanılabileceği gibi, https://github.com/jordant0/DP-SLAM, adresindeki scan_data.log isimli data setide kullanılabilir. Ek olarak https://users.cs.duke.edu/~parr/dpslam/, adresindeki "Sample Output" başlığı altındaki farklı data setleri de kullanılabilir. 
+
+       
+image::images/linux.PNG[]
+
+image::images/linux2.PNG[]
+
+image::images/linux3.PNG[]
+
+
 
 *Algoritmanın Kodsal Karşılığı*
 

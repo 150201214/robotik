@@ -18,6 +18,7 @@ image::images/maps.png[]
 image::images/otree.png[]
 
 
+
 *Algoritma ve Analizi*
 
 Her bir parçacık harita ve robotun harita içindeki konumu ve yönü hakkında belirgin bir hipoteze karşılık gelir. Haritalarımız M kareden oluşan ızgaralardır. Parçacık filtresi P parçacıklarını muhafaza ederse, bu dağıtımı koruyan bir parçacık filtresinin naif bir uygulaması yineleme başına O(MP) maliyetli iş gerektirir.
@@ -49,12 +50,14 @@ Lazerin kare j-1 değerine ulaşıp sonra j noktasında durma ihtimali şu şeki
 image::images/formul4.PNG[]
 
 
+
 *Kaynak Kodların Çalıştırılması*
 
 DP-Slam algoritmasını çalıştırabilmemiz için şu adımları izlememiz gerekmektedir:
 
 *1)* İlk olarak https://www.openslam.org/dpslam.html linkinden DP-Slam algoritmasının kaynak kodlarının indirmeliyiz.
-*Alternetif Link:* https://github.com/jordant0/DP-SLAM
+*Alternatif Link:* https://github.com/jordant0/DP-SLAM
+
 
 *2)* Algoritmayı çalıştırabilmemiz için linux işletim sistemine ihtiyacımız vardır. Linux işletim sistemini sanal makine üzerinde çalıştırabiliriz. Linux işletim sistemini çalıştırabilmemiz için,
 
@@ -63,7 +66,8 @@ a) https://www.virtualbox.org/wiki/Downloads ,adresinden sanal makine indirilere
 b) Daha sonra https://www.ubuntu.com/download/desktop , adresinden Ubuntu 16.04 sürümüde indirilerek kurulumu yapılır.
 
 *Not:* Alternatif olarak  http://wiki.ros.org/turtlebot/Tutorials/indigo/ISO%20Installation , adresinden Ununtu 14.04 Ros İndigo indirilerek, kurulumu yapılabilir.
-     
+  
+  
 *3)* Yukarıdaki adımlar tamamlandıktan sonra, Rosbag kurulumu yapılır.
 
       sudo apt-get update
@@ -73,6 +77,7 @@ b) Daha sonra https://www.ubuntu.com/download/desktop , adresinden Ubuntu 16.04 
 *Rosbag Nedir?*
 
 Bir komut satırı aracıdır. Robot hareket ederken yayınlanan mesajları kaydedebilmekte ve daha sonra bu mesajları oynatabilmektedir. Bu sayede robot çalıştırılmadan bag dosyası üzerinden testler yapılabilmektedir. Diğer bir yandan farklı algoritmaların aynı ortamda karşılaştırılmasında, robot her bir algoritmanın 33 uygulanması sırasında alanı tekrar gezmesi gerekecektir. Bu durum her ne kadar gayret edilse de robotun aynı alanı aynı şekilde ufak farklılıklarla bile olsa gezememesine yol açacaktır. Ve karşılaştırma yapılan örnekler farklı olduğundan net sonuca ulaşılamayabilir. Oysaki gezilen alanın verilerinin toplandığı mesajlar bir bag dosyasına kaydedildiğinde her bir algoritma için aynı veri kullanılabilmektedir. Bu yöntem hem pratiklik sağlamakta hem de karşılaştırma doğruluğunu arttırmaktadır.
+
 
 *4)* Imagemagick kurulumu yapılır.
 
@@ -96,15 +101,18 @@ kısaca elinden gelenler;
 
 * büyük resim desteği: mega- veya giga-pixel imagelar üzerinde okuma, işleme, yazma
 
+
 *5)* İndirdiğimiz dosyaları biz "Belgelerim" altında "DP-SLAM" klasörünün içine attık, bundan dolayı dosya yolu şu şekilde  belirlemeliyiz.
 
       cd Belgeler
       cd DP-SLAM
       cd dp-slam
-      
+     
+     
 *6)* Makefile  dosyası derlenmelidir.
 
       make
+
 
 *7)* odometry verileri okunmalıdır.
 
@@ -123,6 +131,7 @@ image::images/linux.PNG[]
 image::images/linux2.PNG[]
 
 image::images/linux3.PNG[]
+
 
 
 
@@ -758,11 +767,13 @@ Haritaları üretmek ve korumak için kod:
               if (totalProb == 1)
                 return 0;
               return (eval / (1.0 - totalProb));
-             
+    
+    
              
 *Örnek İnput ve Output*
 
 image::images/in.PNG[]
+
 
 
 image::images/c1.png[]

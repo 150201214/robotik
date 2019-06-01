@@ -41,13 +41,11 @@ Burada x mesafeyi, p ortam tipini, k bölünme sayısını ifade eder.
 
 Lazer atışının n'ye kadar olan kareler tarafından kesilen kümülatif olasılığı şu şekilde ifade edilir:
 
-image::images/formul3.PNG[]
-<p align="center"><img src="images/maps.png"></p>
+<p align="center"><img src="images/formul3.PNG"></p>
 
 Lazerin kare j-1 değerine ulaşıp sonra j noktasında durma ihtimali şu şekildedir:
 
-image::images/formul4.PNG[]
-<p align="center"><img src="images/maps.png"></p>
+<p align="center"><img src="images/formul4.PNG"></p>
 
 ### Kaynak Kodların Çalıştırılması
 
@@ -72,7 +70,7 @@ b) Daha sonra https://www.ubuntu.com/download/desktop , adresinden Ubuntu 16.04 
       sudo apt-get install python-rosbag
 
 
-### Rosbag Nedir?
+##### Rosbag Nedir?
 
 Bir komut satırı aracıdır. Robot hareket ederken yayınlanan mesajları kaydedebilmekte ve daha sonra bu mesajları oynatabilmektedir. Bu sayede robot çalıştırılmadan bag dosyası üzerinden testler yapılabilmektedir. Diğer bir yandan farklı algoritmaların aynı ortamda karşılaştırılmasında, robot her bir algoritmanın 33 uygulanması sırasında alanı tekrar gezmesi gerekecektir. Bu durum her ne kadar gayret edilse de robotun aynı alanı aynı şekilde ufak farklılıklarla bile olsa gezememesine yol açacaktır. Ve karşılaştırma yapılan örnekler farklı olduğundan net sonuca ulaşılamayabilir. Oysaki gezilen alanın verilerinin toplandığı mesajlar bir bag dosyasına kaydedildiğinde her bir algoritma için aynı veri kullanılabilmektedir. Bu yöntem hem pratiklik sağlamakta hem de karşılaştırma doğruluğunu arttırmaktadır.
 
@@ -82,7 +80,7 @@ Bir komut satırı aracıdır. Robot hareket ederken yayınlanan mesajları kayd
       sudo apt-get update
       sudo apt-get install imagemagick
 
-### Imagemagick Nedir?
+##### Imagemagick Nedir?
 
 ada, c, ch, com+, c++, java, lisp, neko, .net, pascal, perl, php, python, ruby, tcl/tk dilleri ve/veya platformları için eklentileri bulunan, bunlarla da istenirse kullanılabilen bir yazılım.
 kısaca elinden gelenler;
